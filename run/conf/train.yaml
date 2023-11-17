@@ -11,7 +11,7 @@ hydra:
 
 defaults:
   - _self_
-  - dir: local
+  - dir: bolt
   - dataset: seg
   - model: Spec2DCNN
   - feature_extractor: CNNSpectrogram

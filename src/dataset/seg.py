@@ -18,6 +18,7 @@ def get_seg_label(
     this_event_df: pd.DataFrame, num_frames: int, duration: int, start: int, end: int
 ) -> np.ndarray:
     # # (start, end)の範囲と(onset, wakeup)の範囲が重なるものを取得
+    # Retrieve items where the range (start, end) overlaps with the range (onset, wakeup)
     this_event_df = this_event_df.query("@start <= wakeup & onset <= @end")
 
     label = np.zeros((num_frames, 3))
@@ -99,7 +100,7 @@ class SegTrainDataset(Dataset):
         return {
             "series_id": series_id,
             "feature": feature,  # (num_features, upsampled_num_frames)
-            "label": torch.FloatTensor(label),  # (pred_length, num_classes)
+            "label": torch.FloatTensor(label),  # (num_frames, num_classes) | (self.upsampled_num_frames // self.cfg.downsample_rate, 3)
         }
 
 

@@ -11,7 +11,8 @@ from pytorch_lightning.callbacks import (
     RichProgressBar,
 )
 from pytorch_lightning.loggers import WandbLogger
-
+import sys
+sys.path.append("/mnt/task_runtime")
 from src.conf import TrainConfig
 from src.datamodule import SleepDataModule
 from src.modelmodule import PLSleepModel

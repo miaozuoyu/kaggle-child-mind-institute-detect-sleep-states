@@ -1,0 +1,5 @@
+data_dir: /mnt/task_runtime/data
+processed_dir: /mnt/task_runtime/processed_data
+output_dir: /mnt/task_runtime/output
+model_dir: /mnt/task_runtime/output/train
+sub_dir: ./

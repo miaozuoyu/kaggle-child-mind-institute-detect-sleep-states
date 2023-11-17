@@ -67,7 +67,10 @@ class CNNSpectrogram(nn.Module):
         """Forward pass of the model.
 
         Args:
-            x (_type_): (batch_size, in_channels, time_steps)
+            x (_type_): (batch_size, in_channels, time_steps) | (
+            batch_size, num_features, upsampled_num_frames=
+            nearest_valid_size(int(self.cfg.duration * self.cfg.upsample_rate), self.cfg.downsample_rate)
+        )
 
         Returns:
             _type_: (batch_size, out_chans, height, time_steps)
@@ -76,9 +79,9 @@ class CNNSpectrogram(nn.Module):
         out: list[torch.Tensor] = []
         for i in range(self.out_chans):
             out.append(self.spec_conv[i](x))
-        img = torch.stack(out, dim=1)  # (batch_size, out_chans, height, time_steps)
+        img = torch.stack(out, dim=1)  # (batch_size, out_chans, height, time_steps) | (batch_size, 4, 128, time_steps)   where time_steps = nearest_valid_size(int(duration * cfg.upsample_rate), cfg.downsample_rate)
         if self.out_size is not None:
-            img = self.pool(img)  # (batch_size, out_chans, height, out_size)
+            img = self.pool(img)  # (batch_size, out_chans, height, out_size) | (batch_size, 4, 128, time_steps // cfg.downsample_rate)
         if self.sigmoid:
             img = img.sigmoid()
         return img

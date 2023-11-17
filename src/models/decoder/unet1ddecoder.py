@@ -191,7 +191,7 @@ class UNet1DDecoder(nn.Module):
         """Forward
 
         Args:
-            x (torch.Tensor): (batch_size, n_channels, n_timesteps)
+            x (torch.Tensor): (batch_size, n_channels/extractor.height, n_timesteps)
 
         Returns:
             torch.Tensor: (batch_size, n_timesteps, n_classes)
@@ -209,5 +209,5 @@ class UNet1DDecoder(nn.Module):
         x = self.up4(x, x1)
 
         # classifier
-        logits = self.cls(x)  # (batch_size, n_classes, n_timesteps)
+        logits = self.cls(x)  # input: (batch_size, extractor.height, n_timesteps) output:(batch_size, n_classes, n_timesteps) | num_timesteps // cfg.downsample_rate,
         return logits.transpose(1, 2)  # (batch_size, n_timesteps, n_classes)

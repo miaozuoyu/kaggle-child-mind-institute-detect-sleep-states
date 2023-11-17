@@ -55,9 +55,9 @@ def get_decoder(
     decoder: DECODER_TYPE
     if cfg.name == "UNet1DDecoder":
         decoder = UNet1DDecoder(
-            n_channels=n_channels,
-            n_classes=n_classes,
-            duration=num_timesteps,
+            n_channels=n_channels, # 128
+            n_classes=n_classes, # 3
+            duration=num_timesteps, # num_timesteps // cfg.downsample_rate,
             **cfg.params,
         )
     elif cfg.name == "LSTMDecoder":
@@ -92,7 +92,7 @@ def get_model(
         feature_extractor = get_feature_extractor(
             cfg.feature_extractor, feature_dim, num_timesteps
         )
-        decoder = get_decoder(cfg.decoder, feature_extractor.height, n_classes, num_timesteps)
+        decoder = get_decoder(cfg.decoder, feature_extractor.height, n_classes, num_timesteps) # num_timesteps // cfg.downsample_rate,
         if test:
             cfg.model.params["encoder_weights"] = None
         model = Spec2DCNN(

@@ -41,15 +41,15 @@ class Spec2DCNN(BaseModel):
         do_mixup: bool = False,
         do_cutmix: bool = False,
     ) -> torch.Tensor | tuple[torch.Tensor, torch.Tensor]:
-        x = self.feature_extractor(x)  # (batch_size, n_channels, height, n_timesteps)
+        x = self.feature_extractor(x)  # input:(batch_size, feature_num, upsampled_num_frames)  output:(batch_size, n_channels, height, n_timesteps) | (batch_size, 4, 128, upsampled_num_frames//downsample_rate)
 
         if do_mixup and labels is not None:
             x, labels = self.mixup(x, labels)
         if do_cutmix and labels is not None:
             x, labels = self.cutmix(x, labels)
 
-        x = self.encoder(x).squeeze(1)  # (batch_size, height, n_timesteps)
-        logits = self.decoder(x)  # (batch_size, n_timesteps, n_classes)
+        x = self.encoder(x).squeeze(1)  # input: (batch_size, n_channels, height, n_timesteps) output: (batch, classes=1, h, w) -> (batch_size, height, n_timesteps)
+        logits = self.decoder(x)  # input:(batch_size, n_channels, n_timesteps), output: (batch_size, n_timesteps, n_classes)
 
         if labels is not None:
             return logits, labels
