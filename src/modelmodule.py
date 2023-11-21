@@ -110,6 +110,7 @@ class PLSleepModel(LightningModule):
             print(f"Saved best model {self.__best_loss} -> {loss}")
             self.__best_loss = loss
 
+        self.log("best_loss", self.__best_loss, on_step=False, on_epoch=True, logger=True, prog_bar=True)
         self.validation_step_outputs.clear()
 
     def configure_optimizers(self):

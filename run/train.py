@@ -10,7 +10,8 @@ from pytorch_lightning.callbacks import (
     RichModelSummary,
     RichProgressBar,
 )
-from pytorch_lightning.loggers import WandbLogger
+# from pytorch_lightning.loggers import WandbLogger
+from pytorch_lightning.loggers import CSVLogger
 import sys
 sys.path.append("/mnt/task_runtime")
 from src.conf import TrainConfig
@@ -47,11 +48,12 @@ def main(cfg: TrainConfig):
     model_summary = RichModelSummary(max_depth=2)
 
     # init experiment logger
-    pl_logger = WandbLogger(
-        name=cfg.exp_name,
-        project="child-mind-institute-detect-sleep-states",
-    )
-    pl_logger.log_hyperparams(cfg)
+    # pl_logger = WandbLogger(
+    #     name=cfg.exp_name,
+    #     project="child-mind-institute-detect-sleep-states",
+    # )
+    # pl_logger.log_hyperparams(cfg)
+    pl_logger = CSVLogger("./", name=cfg.exp_name)
 
     trainer = Trainer(
         # env
@@ -77,6 +79,7 @@ def main(cfg: TrainConfig):
     trainer.fit(model, datamodule=datamodule)
 
     # load best weights
+    # ** kwargs: Any extra keyword args needed to init the model.Can also be used to override saved hyperparameter values.
     model = model.load_from_checkpoint(
         checkpoint_cb.best_model_path,
         cfg=cfg,
