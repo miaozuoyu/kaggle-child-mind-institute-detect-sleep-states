@@ -165,3 +165,4 @@ output/
 bolt/
 scp.sh
 secrets
+.DS_Store

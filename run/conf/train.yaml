@@ -10,13 +10,13 @@ hydra:
     subdir: run${hydra.job.num}
 
 defaults:
-  - _self_
   - dir: bolt
   - dataset: seg
   - model: Spec2DCNN
   - feature_extractor: CNNSpectrogram
   - decoder: UNet1DDecoder
   - split: fold_0
+  - _self_
 
 seed: 42
 exp_name: dummy
@@ -58,15 +58,15 @@ labels:
 features:
   - "anglez"
   - "enmo"
-  # - "step"
-  # - "month_sin"
-  # - "month_cos"
+  - "step"
+  - "month_sin"
+  - "month_cos"
   - "hour_sin"
   - "hour_cos"
-  # - "minute_sin"
-  # - "minute_cos"
-  # - "anglez_sin"
-  # - "anglez_cos"
+  - "minute_sin"
+  - "minute_cos"
+  - "anglez_sin"
+  - "anglez_cos"
 
 # optimizer
 optimizer:
