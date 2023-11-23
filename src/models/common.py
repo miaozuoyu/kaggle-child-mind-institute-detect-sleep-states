@@ -7,6 +7,7 @@ from src.models.base import BaseModel
 from src.models.centernet import CenterNet
 from src.models.decoder.lstmdecoder import LSTMDecoder
 from src.models.decoder.mlpdecoder import MLPDecoder
+from src.models.decoder.transformercnndecoder import TransformerCNNDecoder
 from src.models.decoder.transformerdecoder import TransformerDecoder
 from src.models.decoder.unet1ddecoder import UNet1DDecoder
 from src.models.detr2D import DETR2DCNN
@@ -16,11 +17,14 @@ from src.models.feature_extractor.panns import PANNsFeatureExtractor
 from src.models.feature_extractor.spectrogram import SpecFeatureExtractor
 from src.models.spec1D import Spec1D
 from src.models.spec2Dcnn import Spec2DCNN
+from src.models.transformerautomodel import TransformerAutoModel
 
 FEATURE_EXTRACTOR_TYPE = Union[
     CNNSpectrogram, PANNsFeatureExtractor, LSTMFeatureExtractor, SpecFeatureExtractor
 ]
-DECODER_TYPE = Union[UNet1DDecoder, LSTMDecoder, TransformerDecoder, MLPDecoder]
+DECODER_TYPE = Union[
+    UNet1DDecoder, LSTMDecoder, TransformerDecoder, MLPDecoder, TransformerCNNDecoder
+]
 
 
 def get_feature_extractor(
@@ -73,7 +77,17 @@ def get_decoder(
             **cfg.params,
         )
     elif cfg.name == "MLPDecoder":
-        decoder = MLPDecoder(n_channels=n_channels, n_classes=n_classes)
+        decoder = MLPDecoder(
+            n_channels=n_channels, 
+            n_classes=n_classes,
+            **cfg.params,
+    )
+    elif cfg.name == "TransformerCNNDecoder":
+        decoder = TransformerCNNDecoder(
+            input_size=n_channels,
+            n_classes=n_classes,
+            **cfg.params,
+        )
     else:
         raise ValueError(f"Invalid decoder name: {cfg.name}")
 
@@ -107,7 +121,8 @@ def get_model(
         feature_extractor = get_feature_extractor(
             cfg.feature_extractor, feature_dim, num_timesteps
         )
-        decoder = get_decoder(cfg.decoder, feature_extractor.height, n_classes, num_timesteps)
+        n_channels = feature_extractor.out_chans * feature_extractor.height
+        decoder = get_decoder(cfg.decoder, n_channels, n_classes, num_timesteps)
         model = Spec1D(
             feature_extractor=feature_extractor,
             decoder=decoder,
@@ -142,6 +157,15 @@ def get_model(
             feature_extractor=feature_extractor,
             decoder=decoder,
             in_channels=feature_extractor.out_chans,
+            mixup_alpha=cfg.aug.mixup_alpha,
+            cutmix_alpha=cfg.aug.cutmix_alpha,
+            **cfg.model.params,
+        )
+    elif cfg.model.name == "TransformerAutoModel":
+        model = TransformerAutoModel(
+            n_channels=feature_dim,
+            n_classes=n_classes,
+            out_size=num_timesteps,
             mixup_alpha=cfg.aug.mixup_alpha,
             cutmix_alpha=cfg.aug.cutmix_alpha,
             **cfg.model.params,
