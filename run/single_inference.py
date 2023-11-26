@@ -108,8 +108,8 @@ def main(cfg: InferenceConfig):
 
     with trace("inference"):
         keys, preds = inference(cfg.duration, test_dataloader, model, device, use_amp=cfg.use_amp)
-        joblib.dump(keys, Path(cfg.dir.sub_dir) / f"keys_{cfg.weight.exp_name}_{cfg.weight.run_name}.joblib")
-        joblib.dump(preds, Path(cfg.dir.sub_dir) / f"preds_{cfg.weight.exp_name}_{cfg.weight.run_name}.joblib")
+        joblib.dump(keys, f"keys_{cfg.weight.exp_name}_{cfg.weight.run_name}.joblib")
+        joblib.dump(preds,f"preds_{cfg.weight.exp_name}_{cfg.weight.run_name}.joblib")
 
 
 
