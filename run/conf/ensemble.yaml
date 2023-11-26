@@ -1,0 +1,16 @@
+# ---------- Overriding hydra default configs ----------
+hydra:
+  job:
+    name: inference
+    chdir: true
+  run:
+    dir: ${dir.output_dir}/${hydra.job.name}/${exp_name}/single
+  sweep:
+    dir: ${dir.output_dir}/${hydra.job.name}/${exp_name}
+    subdir: run${hydra.job.num}
+
+seed: 42
+
+pp:
+  score_th: 0.005
+  distance: 96

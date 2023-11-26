@@ -140,3 +140,9 @@ class InferenceConfig:
     dataset: DatasetConfig
     aug: AugmentationConfig
     pp: PostProcessConfig
+
+@dataclass
+class EnsembleConfig:
+    seed: int
+    dir: DirConfig
+    pp: PostProcessConfig

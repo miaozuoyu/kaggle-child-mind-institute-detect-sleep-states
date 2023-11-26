@@ -79,6 +79,32 @@ python run/train.py exp_name=exp007 model.params.encoder_name=efficientnet-b2 fe
 python run/train.py exp_name=exp008 feature_extractor.params.base_filters=128 feature_extractor.params.kernel_sizes=[64,32,16,2]
 python run/train.py exp_name=exp009 feature_extractor.params.base_filters=128 feature_extractor.params.kernel_sizes=[128,64,32,2]
 python run/train.py exp_name=exp010 feature_extractor.params.base_filters=128 feature_extractor.params.kernel_sizes=[128,64,2]
+python run/train.py exp_name=exp011 feature_extractor=LSTMFeatureExtractor
+python run/train.py exp_name=exp012 decoder=MLPDecoder
+python run/train.py exp_name=exp013 feature_extractor.params.base_filters=128 features=["anglez","enmo","hour_sin","hour_cos"]
+python run/train.py exp_name=exp014 feature_extractor.params.base_filters=128 features=["anglez","enmo","hour_sin","hour_cos","anglez_sin","anglez_cos"]
+python run/train.py exp_name=exp015 feature_extractor.params.base_filters=128 features=["anglez","enmo","hour_sin","hour_cos"] decoder.params.se=True
+python run/train.py exp_name=exp016 feature_extractor.params.base_filters=128 features=["anglez","enmo","hour_sin","hour_cos","anglez_sin","anglez_cos"] decoder.params.se=True
+python run/train.py exp_name=exp017 feature_extractor.params.kernel_sizes=[128,64,32] feature_extractor.params.base_filters=128 features=["anglez","enmo","hour_sin","hour_cos","anglez_sin","anglez_cos"]
+python run/train.py exp_name=exp018 feature_extractor.params.kernel_sizes=[128,64,32,16,8] feature_extractor.params.base_filters=128 features=["anglez","enmo","hour_sin","hour_cos","anglez_sin","anglez_cos"]
+python run/train.py exp_name=exp019 feature_extractor.params.kernel_sizes=[128,64,32,16,8,4] feature_extractor.params.base_filters=128 features=["anglez","enmo","hour_sin","hour_cos","anglez_sin","anglez_cos"]
+python run/train.py exp_name=exp020 feature_extractor.params.kernel_sizes=[128,64,2] feature_extractor.params.base_filters=128 features=["anglez","enmo","hour_sin","hour_cos","anglez_sin","anglez_cos"]
+python run/train.py exp_name=exp021 feature_extractor.params.kernel_sizes=[128,64,32] feature_extractor.params.base_filters=128 features=["anglez","enmo","hour_sin","hour_cos","anglez_sin","anglez_cos"] dataset.batch_size=64
+python run/train.py exp_name=exp022 feature_extractor.params.kernel_sizes=[128,64,32] feature_extractor.params.base_filters=128 features=["anglez","enmo","hour_sin","hour_cos","anglez_sin","anglez_cos"] decoder.params.dropout=0.1
+python run/train.py exp_name=exp023 feature_extractor.params.kernel_sizes=[128,64,32] feature_extractor.params.base_filters=256 features=["anglez","enmo","hour_sin","hour_cos","anglez_sin","anglez_cos"]
+python run/train.py exp_name=exp024 feature_extractor.params.kernel_sizes=[128,64,32] feature_extractor.params.base_filters=256 features=["anglez","enmo","hour_sin","hour_cos","anglez_sin","anglez_cos"] decoder.params.dropout=0.1
+
+python run/train.py exp_name=exp025 feature_extractor.params.base_filters=128 features=["anglez","enmo","hour_sin","hour_cos","anglez_sin","anglez_cos"] pp.score_th=0.005 pp.distance=40
+python run/train.py exp_name=exp026 features=["anglez","enmo","hour_sin","hour_cos"] pp.score_th=0.005 pp.distance=40
+python run/train.py exp_name=exp027 feature_extractor.params.base_filters=128 features=["anglez","enmo","hour_sin","hour_cos","anglez_sin","anglez_cos"] pp.score_th=0.005 pp.distance=300
+python run/train.py exp_name=exp028 features=["anglez","enmo","hour_sin","hour_cos"] pp.score_th=0.005 pp.distance=300
+
+python run/train.py exp_name=exp_fold_0 features=["anglez","enmo","hour_sin","hour_cos"] split=fold_0
+python run/train.py exp_name=exp_fold_1 features=["anglez","enmo","hour_sin","hour_cos"] split=fold_1
+python run/train.py exp_name=exp_fold_2 features=["anglez","enmo","hour_sin","hour_cos"] split=fold_2
+python run/train.py exp_name=exp_fold_3 features=["anglez","enmo","hour_sin","hour_cos"] split=fold_3
+python run/train.py exp_name=exp_fold_4 features=["anglez","enmo","hour_sin","hour_cos"] split=fold_4
+
 ```
 
 You can easily perform experiments by changing the parameters because [hydra](https://hydra.cc/docs/intro/) is used.
@@ -92,6 +118,7 @@ python run/train.py -m exp_name=all_feature dataset.batch_size=4,8,16,32 optimiz
 python run/train.py -m exp_name=all_feature2 dataset.batch_size=4,8,16,32 optimizer.lr=0.0001,0.001,0.0005,0.00005 scheduler.num_warmup_steps=0.1 
 python run/train.py -m exp_name=exp_backbone model.params.encoder_name=efficientnet-b2,efficientnet-b3,efficientnet-b4,efficientnet-b5,efficientnet-b6,efficientnet-b7 trainer.epochs=100
 python run/train.py -m exp_name=exp_backbone_long model.params.encoder_name=resnet34,efficientnet-b2,efficientnet-b3,efficientnet-b4,efficientnet-b5,efficientnet-b6,efficientnet-b7 trainer.epochs=100
+
 
 ```
 
