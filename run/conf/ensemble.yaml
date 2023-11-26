@@ -1,13 +1,17 @@
 # ---------- Overriding hydra default configs ----------
 hydra:
   job:
-    name: inference
+    name: ensemble
     chdir: true
   run:
-    dir: ${dir.output_dir}/${hydra.job.name}/${exp_name}/single
+    dir: ${dir.output_dir}/${hydra.job.name}/single
   sweep:
-    dir: ${dir.output_dir}/${hydra.job.name}/${exp_name}
+    dir: ${dir.output_dir}/${hydra.job.name}/
     subdir: run${hydra.job.num}
+
+defaults:
+  - _self_
+  - dir: local
 
 seed: 42
 

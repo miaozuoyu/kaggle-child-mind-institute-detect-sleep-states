@@ -131,6 +131,13 @@ python tools/upload_dataset.py
 The following commands are for inference of LB0.714 
 ```bash
 rye run python run/inference.py dir=kaggle exp_name=exp001 weight.run_name=single downsample_rate=2 duration=5760 model.params.encoder_weights=null pp.score_th=0.005 pp.distance=40 phase=test
+
+python run/single_inference.py dir=bolt exp_name=exp_fold_train_0 weight.run_name=single model.params.encoder_weights=null phase=test
+python run/single_inference.py dir=bolt exp_name=exp_fold_train_1 weight.run_name=single model.params.encoder_weights=null phase=test
+python run/ensemble_inference.py dir=bolt
+
+
+
 ```
 
 ## Implemented models

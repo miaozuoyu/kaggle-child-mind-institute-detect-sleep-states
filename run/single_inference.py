@@ -7,7 +7,8 @@ import torch
 from pytorch_lightning import seed_everything
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-
+import sys
+sys.path.append("/mnt/task_runtime")
 from src.conf import InferenceConfig
 from src.datamodule import load_chunk_features
 from src.dataset.common import get_test_ds

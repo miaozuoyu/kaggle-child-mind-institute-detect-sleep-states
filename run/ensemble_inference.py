@@ -1,3 +1,4 @@
+import pdb
 from pathlib import Path
 
 import hydra
@@ -5,7 +6,8 @@ import numpy as np
 import polars as pl
 from pytorch_lightning import seed_everything
 
-
+import sys
+sys.path.append("/mnt/task_runtime")
 from src.conf import EnsembleConfig
 
 from src.utils.common import nearest_valid_size, trace
@@ -28,6 +30,7 @@ def make_submission(
 def load_preds(path_dir):
     key_names = path_dir.rglob("keys_*.joblib")
     pred_names = path_dir.rglob("preds_*.joblib")
+    # pdb.set_trace()
 
     keys = [joblib.load(key_name) for key_name in key_names]
     all_preds = [joblib.load(pred_name) for pred_name in pred_names]
@@ -40,7 +43,7 @@ def load_preds(path_dir):
 def main(cfg: EnsembleConfig):
     seed_everything(cfg.seed)
 
-    keys, preds = load_preds(Path(cfg.dir.sub_dir))
+    keys, preds = load_preds(Path(cfg.dir.output_dir))
 
     with trace("make submission"):
         sub_df = make_submission(
